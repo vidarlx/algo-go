@@ -1,7 +1,9 @@
 package QuickSort
 
 import (
+	"math/rand"
 	"reflect"
+	"sort"
 	"testing"
 )
 
@@ -30,4 +32,36 @@ func TestQuickSort(t *testing.T) {
 			)
 		}
 	}
+}
+
+func TestQuickSortOnRandom(t *testing.T) {
+	var randomInts = randomInts(1, 1000, 100000)
+	// slices are passed by reference, so make a copy
+	sorted := make([]int, len(randomInts))
+	b := make([]int, len(randomInts))
+	copy(b, randomInts)
+	copy(sorted, randomInts)
+
+	sort.Sort(sort.IntSlice(sorted))
+
+	var result = quickSort(b)
+	if reflect.DeepEqual(result, sorted) == false {
+		t.Error(
+			"For", randomInts,
+			"expected", sorted,
+			"got", result,
+		)
+	}
+}
+
+func randomInts(min int, max int, amount int) []int {
+	var res []int
+	var bytes int
+	i := 0
+	for i < amount {
+		bytes = min + rand.Intn(max)
+		res = append(res, bytes)
+		i++
+	}
+	return res
 }
